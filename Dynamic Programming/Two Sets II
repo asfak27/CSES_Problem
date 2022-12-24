@@ -1,0 +1,53 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define ll   int
+#define mod 1000000007
+#define N 501
+#define  fast  ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL)
+ll dp[N][N*N];
+ll a[N];
+ 
+ll dfs(ll idx,ll k)
+{
+    if(idx<=0 || k<0)return 0;
+    if(k==0)return 1;
+ 
+    if(dp[idx][k]!=-1)return dp[idx][k];
+ 
+    ll ans=dfs(idx-1,k)%mod+dfs(idx-1,k-a[idx])%mod;
+ 
+    return dp[idx][k]=ans%mod;
+ 
+}
+ 
+void solve()
+{
+    vector<ll>v;
+    ll n,m,i,j;
+    cin>>n;
+    ll x=n*(n+1)/2;
+ 
+    if(x%2)
+    {
+        cout<<0<<endl;
+        return;
+    }
+    ll k=x/2;
+    for(i=1;i<=n;i++)
+    {
+        a[i]=i;
+    }
+    memset(dp,-1,sizeof dp);
+ 
+    ll ans=dfs(n,k);
+    cout<<ans%mod<<endl;
+ 
+}
+int main()
+{
+    fast;
+    int T=1;
+    //cin>>T;
+    while(T--)solve();
+    return 0;
+}
