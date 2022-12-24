@@ -1,0 +1,56 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define ll int
+#define  mod       1000000007
+ 
+void solve()
+{
+    vector<ll>v,v1;
+    map<ll,ll>mp;
+    ll n,m,j,i,k,len,z,p,x,y;
+    cin>>n;
+    m=n;
+    ll dp[n+1][m+1];
+    char a[n+1][m+1];
+    for(i=0;i<n;i++)
+    {
+        for(j=0;j<m;j++)
+        {
+            cin>>a[i][j];
+            dp[i][j]=0;
+        }
+    }
+    dp[0][0]=1;
+    for(i=0;i<n;i++)
+    {
+        for(j=0;j<m;j++)
+        {
+            if(a[i][j]=='*')
+            {
+                dp[i][j]=0;
+                continue;
+            }
+            if(i>0)dp[i][j]+=dp[i-1][j];
+            if(j>0)dp[i][j]+=dp[i][j-1];
+            dp[i][j]%=mod;
+        }
+    }
+    /*for(i=0;i<n;i++)
+    {
+        for(j=0;j<m;j++)
+        {
+            cout<<dp[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+    cout<<endl;*/
+    cout<<dp[n-1][m-1]%mod<<endl;
+ 
+}
+int main()
+{
+    int T=1;
+    //cin>>T;
+    while(T--)solve();
+    return 0;
+}
