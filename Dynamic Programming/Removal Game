@@ -1,0 +1,69 @@
+#include <bits/stdc++.h>
+#include <math.h>
+using namespace std;
+#define ll       long long int
+#define mod      1000000007
+#define N        5002
+#define yes      cout<<"Yes"<<endl
+#define no      cout<<"No"<<endl
+#define gcd(a,b) __gcd(a,b)
+#define lcm(a,b) a*b/(gcd(a,b))
+#define  fast  ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL)
+ll a[N];
+ll dp[N][N][2];
+ll mx;
+ll dfs(ll i,ll j,ll f)
+{
+    if(i==j)
+    {
+        if(f)return a[i];
+        else return 0;
+    }
+    if(i>j)return 0;
+ 
+    if(dp[i][j][f]!=-1)return dp[i][j][f];
+ 
+    ll ans=0;
+    if(f)
+    {
+        ans=max(a[i]+dfs(i+1,j,0),a[j]+dfs(i,j-1,0));
+        return dp[i][j][f]=ans;
+    }
+    else{
+ 
+        ll x=a[i]+dfs(i+1,j,0);
+        ll y=a[j]+dfs(i,j-1,0);
+ 
+        if(x>y)
+        {
+            return dp[i][j][f]=dfs(i+1,j,1);
+        }
+        else return dp[i][j][f]=dfs(i,j-1,1);
+    }
+}
+ 
+ 
+void solve()
+{
+    //freopen("textnew.txt","r",stdin);
+    vector<ll>v,p;
+    ll i,j,m,r,l,k,n;
+    string s,t;
+    cin>>n;
+    for(i=0;i<n;i++)
+    {
+        cin>>a[i];
+    }
+    memset(dp,-1,sizeof dp);
+    ll res=dfs(0,n-1,1);
+ 
+    cout<<res<<endl;
+}
+int main()
+{
+    fast;
+    int T=1;
+    //cin>>T;
+    while(T--)solve();
+    return 0;
+}
