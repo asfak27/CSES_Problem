@@ -1,0 +1,58 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long
+#define  N        200002
+vector<ll>g[N];
+bool vis[N];
+ll ans[N];
+void dfs(ll x)
+{
+    vis[x]=1;
+    for(ll i=0; i<g[x].size(); i++)
+    {
+        ll k=g[x][i];
+        if(vis[k]==0)
+        {
+            if(ans[x]==1)
+            {
+                ans[k]=2;
+            }
+            else ans[k]=1;
+            dfs(k);
+        }
+        if(ans[x]==ans[k])
+        {
+            cout<<"IMPOSSIBLE"<<endl;
+            exit(0);
+            return;
+        }
+    }
+ 
+}
+int main()
+{
+    //freopen("textnew.txt","r",stdin);
+    ll n,e,m,i,j;
+    cin>>n>>e;
+    for(i=0; i<e; i++)
+    {
+        ll u,v;
+        cin>>u>>v;
+        g[u].push_back(v);
+        g[v].push_back(u);
+    }
+ 
+    for(i=1; i<=n; i++)
+    {
+        if(!vis[i])
+        {
+            ans[i]=1;
+            dfs(i);
+        }
+    }
+    for(i=1;i<=n;i++)
+    {
+        cout<<ans[i]<<" ";
+    }
+    cout<<endl;
+}
