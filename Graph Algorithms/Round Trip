@@ -1,0 +1,74 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long
+#define  N        2000002
+vector<ll>g[N];
+bool vis[N];
+ll parent[N];
+ll endnode,startnode;
+bool dfs(int u, int p)
+{
+    vis[u] = true;
+    parent[u] = p;
+    for(ll i=0; i<g[u].size(); i++)
+    {
+        ll v=g[u][i];
+        if(v == p) continue;
+        if(vis[v])
+        {
+            startnode = v;
+            endnode = u;
+            return true;
+        }
+        if(!vis[v])
+        {
+            if(dfs(v,u))return true;
+        }
+    }
+    return false;
+}
+bool cheak(ll n)
+{
+    for(ll i=1; i<=n; i++)
+    {
+         if(!vis[i])if(dfs(i,-1))return true;
+    }
+    return false;
+}
+int main()
+{
+    //freopen("textnew.txt","r",stdin);
+    ll n,e,m,i,j;
+    cin>>n>>e;
+    for(i=0; i<e; i++)
+    {
+        ll u,v;
+        cin>>u>>v;
+        g[u].push_back(v);
+        g[v].push_back(u);
+    }
+    if(!cheak(n))
+    {
+        cout<<"IMPOSSIBLE"<<endl;
+    }
+    else
+    {
+        vector<ll>v;
+        ll x=endnode;
+        v.push_back(x);
+        while(x!=startnode)
+        {
+            x=parent[x];
+            v.push_back(x);
+        }
+        v.push_back(endnode);
+        cout<<v.size()<<endl;
+        for(i=0; i<v.size(); i++)
+        {
+            cout<<v[i]<<" ";
+        }
+        cout<<endl;
+ 
+    }
+ 
+}
