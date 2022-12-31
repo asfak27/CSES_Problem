@@ -1,0 +1,58 @@
+#include<bits/stdc++.h>//it search levelewize unweahted graph
+using namespace std;
+#define ll long long
+vector<ll>v;
+vector<ll>g[200002];
+bool vis[200002];  //visited node
+ll dis[200002];    //distance node
+ 
+void bfs(ll x)//x=source node
+{
+    queue<ll>q;
+    vis[x]=1;
+    dis[x]=0;
+    q.push(x);
+    v.push_back(x);
+    while(!q.empty())
+    {
+        ll node=q.front();
+        q.pop();
+        for(ll i=0;i<g[node].size();i++)
+        {
+            ll next=g[node][i];//cheake neighbor node
+            if(vis[next]==0)
+            {
+                vis[next]=1;//visited
+                dis[next]=dis[node]+1; //update
+                q.push(next); //push queue to cheake another node
+            }
+        }
+ 
+    }
+}
+int main()
+{
+   //freopen("textnew.txt","r",stdin);
+   ll n,e,i,j;
+   cin>>n>>e;
+   for(i=1;i<=e;i++)
+   {
+       ll u,v;
+       cin>>u>>v;
+       g[u].push_back(v);
+       g[v].push_back(u);
+   }
+   for(i=1;i<=n;i++)
+   {
+       if(!vis[i])
+       {
+           bfs(i);
+       }
+   }
+   cout<<v.size()-1<<endl;
+   for(i=0;i<v.size()-1;i++)
+   {
+       cout<<v[i]<<" "<<v[i+1]<<endl;
+   }
+ 
+}
