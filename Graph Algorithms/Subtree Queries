@@ -1,0 +1,135 @@
+#include <bits/stdc++.h>
+#include <math.h>
+using namespace std;
+#define ll       long long
+#define mod      1000007
+#define N        200005
+#define yes      cout<<"Yes"<<endl
+#define no      cout<<"No"<<endl
+#define  fast  ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL)
+ll arr[N];
+ll a[N];
+ll tree[N*4];
+vector<ll>g[N];
+ll edtime[N];
+ll sttime[N];
+ll timer=0;
+vector<ll>path;
+void dfs(ll node,ll par)
+{
+    timer++;
+    sttime[node]=timer;
+    path.push_back(node);
+    for(ll i=0; i<g[node].size(); i++)
+    {
+        ll child=g[node][i];
+        if(child!=par)
+        {
+            dfs(child,node);
+        }
+    }
+    edtime[node]=timer;
+}
+struct Segment_Tree
+{
+    ll tree[N*4];
+    void build_tree(ll node,ll b,ll e)
+    {
+        if(b==e)
+        {
+            tree[node]=a[path[b]];
+            return;
+        }
+        ll leftnode = node*2;
+        ll rightnode = node*2+1;
+        ll mid = (b+e)/2;
+        build_tree(leftnode,b,mid);
+        build_tree(rightnode,mid+1,e);
+        tree[node]=tree[leftnode]+tree[rightnode];
+    }
+    ll query(ll node,ll b,ll e,ll i,ll j)
+    {
+        if(i>e || j<b)
+        {
+            return 0;
+        }
+        if (b>=i && e<=j)
+        {
+            return tree[node];
+        }
+        ll leftnode = node*2;
+        ll rightnode = node*2+1;
+        ll mid = (b+e)/2;
+        ll x=query(leftnode,b,mid,i,j);
+        ll y=query(rightnode,mid+1,e,i,j);
+        return x+y;
+    }
+    void update(ll node,ll b,ll e,ll l,ll r,ll newvalue)
+    {
+        if(b>r || e<l)
+        {
+            return;
+        }
+        if(b>=l && e<=r)
+        {
+            tree[node]=newvalue;
+            return;
+        }
+        ll leftnode = node*2;
+        ll rightnode = node*2+1;
+        ll mid = (b+e)/2;
+        update(leftnode,b,mid,l,r,newvalue);
+        update(rightnode,mid+1,e,l,r,newvalue);
+        tree[node]=tree[leftnode]+tree[rightnode];
+    }
+}Stree;
+void solve()
+{
+    //freopen("textnew.txt","r",stdin);
+    //vector<ll>v;
+    //map<ll,ll>row;
+    //map<ll,ll>col;
+    ll n,i,j,k;
+    cin>>n>>k;
+    for(i=1;i<=n;i++)
+    {
+        cin>>a[i];
+    }
+    for(i=1; i<n; i++)
+    {
+        ll u,v;
+        cin>>u>>v;
+        g[u].push_back(v);
+        g[v].push_back(u);
+    }
+    path.push_back(-1);
+    dfs(1,-1);
+ 
+    Stree.build_tree(1,1,n);
+    for(i=1; i<=k; i++)
+    {
+        ll type,idx,val;
+        cin>>type;
+ 
+        if(type==1)
+        {
+            cin>>idx>>val;
+            Stree.update(1,1,n,sttime[idx],sttime[idx],val);
+        }
+        else
+        {
+            ll node;
+            cin>>node;
+            ll ans=Stree.query(1,1,n,sttime[node],edtime[node]);
+            cout<<ans<<endl;
+        }
+    }
+}
+int main()
+{
+    fast;
+    int T=1;
+    //cin>>T;
+    while(T--)solve();
+    return 0;
+}
